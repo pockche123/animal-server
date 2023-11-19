@@ -2,16 +2,20 @@ const Cat = require("../../../model/Cat");
 const db = require("../../../database/connect");
 
 // arrange
-const mockData = {
-    rows: [
-        { id: 1, name: "one", type: "mock", description: "mock", habitat: "mock" },
-        { id: 2, name: "two ", type: "mock", description: "mock", habitat: "mock" },
-        { id: 3, name: "three", type: "mock", description: "mock", habitat: "mock"},
-    ],
-};
+let mockData;
 
 describe("Cat", () => {
-    beforeEach(() => jest.clearAllMocks());
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockData = {
+            rows: [
+                { id: 1, name: "one", type: "mock", description: "mock", habitat: "mock" },
+                { id: 2, name: "two ", type: "mock", description: "mock", habitat: "mock" },
+                { id: 3, name: "three", type: "mock", description: "mock", habitat: "mock" },
+            ],
+        };
+    
+    } );
     afterAll(() => jest.resetAllMocks());
 
     it("is defined", () => {
@@ -84,7 +88,7 @@ describe("Cat", () => {
     describe("update", () => {
         it("modifies a row in the cats database successfully", async () => {
             // arrange
-            jest.spyOn(Cat, "findById").mockResolvedValueOnce(mockData.rows[1]);
+            jest.spyOn(Cat, "findById").mockResolvedValueOnce({ rows: mockData.rows[1]});
 
             const updatedData = {
                 id: 2,
@@ -96,7 +100,7 @@ describe("Cat", () => {
 
             jest.spyOn(db, "query").mockResolvedValueOnce({ rows: [updatedData] });
 
-            const cat = new Cat(updatedData);
+            const cat = new Cat(mockData.rows[1]);
             const result = await cat.update(updatedData);
             expect(result.id).toBe(2);
             expect(result.name).toBe("updatedCat");
