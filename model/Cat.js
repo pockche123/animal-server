@@ -68,7 +68,7 @@ class Cat {
 
         if (catData) {
          await db.query("DELETE FROM cats WHERE id = $1 RETURNING *;", [this.id]);
-        return 'Dog was deleted'  
+        return 'Cat was deleted'  
         } else {
             throw new Error('Cat not found')
         }
